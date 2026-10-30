@@ -11,7 +11,10 @@
 
 # 허용한 폴더 안에서도 제외
 /01_Synapse-STA/실험1_전달노트_ClaudeCode.md
+*.pdf
 __pycache__/
 *.pyc
 .DS_Store
 .env
+# 논문 그림 일부가 들어간 그림
+/01_Synapse-STA/m2/figs/row_assign.png

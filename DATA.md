@@ -24,10 +24,13 @@ export BIOCOMP_DATA_DIR=/path/to/dataverse_files
 | 파일 | 구조 |
 |---|---|
 | `Fig4a_templates.xlsx` | 헤더 `AP, AP+EP, EPSP, IPSP`, 705샘플 × 4 (템플릿) |
-| `Fig4c.xlsx` | 4,096 × 705. 출발 픽셀 하나 기준, 도착 픽셀 4,096개 각각의 STA. 값이 -22 근처라 DC 오프셋이 있다 |
+| `Fig4c.xlsx` | 4,096 × 705. **출발 픽셀 5106**(SI Fig 11) 기준, 도착 픽셀 4,096개 각각의 STA (행 우선, 5106 자신 포함). 값이 -22 근처라 DC 오프셋이 있다. 5106은 Fig4f·Fig4g에 없다 |
 | `Fig4d.xlsx` | 시트 `AP`, `AP_EPSP`, `EPSP`, `IPSP`, 열 `Pre`, `Post`. 종류별 연결 쌍 하나의 원신호 5~8초. 평균 0 근처, 스파이크가 위쪽(부호 반전 이미 적용된 것으로 보임) |
 | `Fig4g.xlsx` | 최종 연결 71,127행: 출발 픽셀, 도착 픽셀, 상관계수, 종류(1=EPSP, 0.5=AP+EPSP, 0=AP/전기 시냅스, -1=IPSP), 피크 위치(샘플) |
-| `Fig4b_Actual_STA.txt`, `Fig4b_Cross-dish_STA_10_groups.txt` | 상관계수 값만 (파형 아님). 실제 vs 다른 접시 대조군 |
+| `Fig4b_Actual_STA.txt`, `Fig4b_Cross-dish_STA_10_groups.txt` | 상관계수 값만 (파형 아님). 실제 vs 다른 접시 대조군. Actual = 가장 활발한 출발 1,000개 × 4,096, EPSP 템플릿 |
+| `ED_FIG2b.txt` | 위와 같은 4,096,000쌍의 4개 템플릿 PCC (열 AP, APEP, EPSP, IPSP) |
+| `Fig4e.xlsx`, `ED_FIG4.xlsx`, `Fig4f.xlsx` | 20분 구간 지도 6장·4장(4열, 피크 없음), 정제 전 합친 지도 72,887행 |
+| Supplementary Information (Nature, 수동 다운로드) | `01_Synapse-STA/41551_2025_1352_MOESM1_ESM.pdf`. SI Fig 11 = Fig4c의 판정 라벨. 커밋 안 함 |
 
 - 픽셀 번호 = 행×100 + 열 (1부터, 예: 5258 = 52행 58열). 칩 64×64, 픽셀 간격 20μm.
 - 종류별 개수: EPSP 63,574 / AP+EPSP 4,065 / AP 3,008 / IPSP 480 (논문과 일치).
