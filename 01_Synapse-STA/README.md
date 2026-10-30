@@ -8,7 +8,7 @@
 
 ## 방법
 
-출발 뉴런이 스파이크를 칠 때마다 도착 뉴런의 전압을 75ms씩 잘라 평균(STA)을 내고, 연결 종류별 템플릿 4개(EPSP, IPSP, AP, AP+EPSP)와 피어슨 상관계수로 비교한다. 설정값은 [METHOD.md](METHOD.md).
+출발 뉴런이 스파이크를 칠 때마다 도착 뉴런의 전압을 75ms씩(스파이크 전 25ms + 후 50ms) 잘라 평균(STA)을 내고, 연결 종류별 템플릿 4개(EPSP, IPSP, AP, AP+EPSP)와 피어슨 상관계수로 비교한다. 설정값은 [METHOD.md](METHOD.md).
 
 ## 결과
 
@@ -24,8 +24,19 @@ _(정리 단계에서 작성)_
 ~/.venvs/biocomp/bin/python 01_Synapse-STA/session0/averaging_demo.py
 ~/.venvs/biocomp/bin/python 01_Synapse-STA/session0/raw_signal.py EPSP
 ~/.venvs/biocomp/bin/python 01_Synapse-STA/session0/snr_explained.py
+
+# 공통 코드 테스트
+cd common && ~/.venvs/biocomp/bin/python test_data.py && cd ..
+
+# M1 템플릿 재생성
+~/.venvs/biocomp/bin/python 01_Synapse-STA/m1/compare_templates.py
+
+# M2 판정 재현
+~/.venvs/biocomp/bin/python 01_Synapse-STA/m2/ap_peak_hist.py
+~/.venvs/biocomp/bin/python 01_Synapse-STA/m2/judge_fig4c.py
+~/.venvs/biocomp/bin/python 01_Synapse-STA/m2/threshold_curve.py
 ```
 
 ## 문서
 
-[BRIEF.md](BRIEF.md) · [STATE.md](STATE.md) · [BACKLOG.md](BACKLOG.md) · [WORKLOG.md](WORKLOG.md) · [CONCEPTS.md](CONCEPTS.md) · [METHOD.md](METHOD.md)
+[BRIEF.md](BRIEF.md) · [STATE.md](STATE.md) · [BACKLOG.md](BACKLOG.md) · [WORKLOG.md](WORKLOG.md) · [CONCEPTS.md](CONCEPTS.md) · [METHOD.md](METHOD.md) · [FIGURES.md](FIGURES.md) (그림과 설명)
