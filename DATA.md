@@ -7,13 +7,13 @@
 | 데이터셋 | Synaptic-connectivity mapping amongst thousands of neurons via parallelized intracellular recording with a microhole electrode array |
 | 위치 | Harvard Dataverse, [doi:10.7910/DVN/S4B1ES](https://doi.org/10.7910/DVN/S4B1ES) (버전 6.1, 공개 2025-01-26) |
 | 논문 | Wang et al., *Nat. Biomed. Eng.* 2025 (함돈희 랩), [doi:10.1038/s41551-025-01352-5](https://doi.org/10.1038/s41551-025-01352-5) |
-| 분석 코드 원본 | [JunWISN/CNEA_Intracellular_Shared](https://github.com/JunWISN/CNEA_Intracellular_Shared) (`CNEALib_Mapping.py`) |
+| 분석 코드 원본 | [JunWISN/CNEA_Intracellular_Shared](https://github.com/JunWISN/CNEA_Intracellular_Shared) (`CNEALib_Mapping.py`). 로컬 클론: `external/CNEA_Intracellular_Shared` (커밋 안 함) |
 | 라이선스 | **CC0 1.0** (Dataverse API로 확인, 2026-10-29) |
 | 받은 날짜 | 2026-10-27, 34개 파일, 약 8.7GB |
 
 ## 위치와 설정
 
-원본은 `dataverse_files/`에 두고 **커밋하지 않는다.** 다른 곳에 두면 환경변수로 알려준다.
+원본은 `dataverse_files/`에 두고 **커밋하지 않는다.** 다른 곳에 두면 환경변수로 알려준다. 읽을 때는 `common/data.py`의 로더를 쓴다.
 
 ```bash
 export BIOCOMP_DATA_DIR=/path/to/dataverse_files
