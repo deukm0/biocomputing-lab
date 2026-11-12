@@ -18,3 +18,5 @@ __pycache__/
 .env
 # 논문 그림 일부가 들어간 그림
 /01_Synapse-STA/m2/figs/row_assign.png
+# 원신호 캐시 (원본 데이터 사본)
+/01_Synapse-STA/gap2/.cache/
