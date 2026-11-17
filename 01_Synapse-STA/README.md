@@ -16,6 +16,29 @@
 
 설정값은 논문 코드([JunWISN/CNEA_Intracellular_Shared](https://github.com/JunWISN/CNEA_Intracellular_Shared))에서 확인해 [METHOD.md](METHOD.md)에 적었다. 데이터는 Harvard Dataverse의 그림 원자료다 ([DATA.md](../DATA.md)).
 
+## 출처와 재현 환경
+
+| 항목 | 내용 |
+|---|---|
+| 논문 | Wang et al., *Nature Biomedical Engineering* (2025), [doi:10.1038/s41551-025-01352-5](https://doi.org/10.1038/s41551-025-01352-5) |
+| 데이터 | Harvard Dataverse, [doi:10.7910/DVN/S4B1ES](https://doi.org/10.7910/DVN/S4B1ES) (버전 6.1, CC0 1.0). 그림 원자료만 있고 긴 원신호는 없다 |
+| 논문 코드 | [JunWISN/CNEA_Intracellular_Shared](https://github.com/JunWISN/CNEA_Intracellular_Shared), 커밋 `d3a8180` (2024-12-10) |
+| 환경 | Python 3.14, numpy 2.5, scipy 1.18, pandas 3.1, matplotlib 3.11, openpyxl 3.1 ([requirements.txt](../requirements.txt)) |
+
+## 코드
+
+| 위치 | 내용 | 출처 |
+|---|---|---|
+| `common/data.py`, `common/test_data.py` | 데이터 경로·로더, 로더 테스트 | 이 저장소에서 작성 |
+| `common/templates.py` | 템플릿 4개(AP, EPSP, IPSP, AP+EPSP) 생성 | **논문 코드에서 옮김:** `CNEALib_Mapping.py`의 `Template_AP`, `Template_PSP`, 기본 템플릿 설정(2404~2406행) |
+| `common/judge.py` | STA 하나를 템플릿과 비교해 종류를 판정 | **논문 코드에서 옮김:** `CNEALib_Mapping.py` 2533~2672행 `Relation_Define_STA_v5` |
+| `01_Synapse-STA/session0`, `m1`~`m4`, `gap2` | 단계별 실험 스크립트와 그림 | 이 저장소에서 작성 |
+
+- **옮긴 코드의 권리:** 원본 저장소([JunWISN/CNEA_Intracellular_Shared](https://github.com/JunWISN/CNEA_Intracellular_Shared))에는 라이선스가 명시되어 있지 않다. 위 두 파일의 원 저작권은 원저자에게 있고, 논문 결과를 재현·검증하려는 목적으로만 옮겼다. 원저자가 요청하면 삭제한다.
+- **AI 활용:** 코드는 AI 코딩 도구(Claude Code)로 작성했다. 단계마다 무엇을 확인할지, 결과를 보기 전의 판정 기준([BRIEF.md](BRIEF.md)), 결과 해석과 논문과의 비교는 내가 정했다. 내가 낸 가설은 문서에 [내 아이디어]로 표시했다. 커밋마다 `Co-Authored-By: Claude`가 붙어 있다.
+
+**23/23의 범위:** 논문 전체의 재현율이 아니다. 출발 픽셀 5106 하나의 STA 4,095개를 판정해, 논문(SI Fig 11)이 연결로 판정한 23개를 종류까지 모두 맞힌 결과다. 검증된 것은 판정 단계(아래 ③·④)다.
+
 ## 결과
 
 | 단계 | 한 일 | 사전 기준 | 결과 |
@@ -39,7 +62,7 @@
 ### 그림 3. 대조 접시마다 FP rate가 다르다 (M4)
 ![](m4/figs/m4_fp_rate.png)
 
-평균은 논문과 같다. 하지만 접시 하나씩 보면 IPSP는 0~48.6%로 퍼지고, 10% 규칙을 지키는 데 필요한 θ가 접시에 따라 0.80~0.94다. 논문의 "FP rate"는 분모가 실제로 판정된 쌍 수라서, 교과서의 거짓양성률(FPR)이 아니라 FDR의 추정치다.
+평균은 논문과 같다. 하지만 접시 하나씩 보면 IPSP는 0~48.6%로 퍼지고, 10% 규칙을 지키는 데 필요한 θ가 접시에 따라 0.80~0.94다. 논문의 "FP rate"는 (대조 접시에서 임계값을 넘은 쌍 수) ÷ (실제 접시에서 넘은 쌍 수)로, 교과서의 거짓양성률(FPR)이나 FDR과 다른 지표다. 분모가 실제로 판정된 쌍 수라서 100%를 넘을 수 있다.
 
 ### 그림 4. 창 제외 규칙이 무작위 평균에도 오르막을 만든다 (틈 2)
 ![](gap2/figs/rule_effect.png)
@@ -58,7 +81,7 @@
 | 3 | 논문 예시 출발 픽셀 5106이 공개된 연결 지도 어디에도 없다 | 확인 | M2 |
 | 6 | Fig4d의 AP 예시 쌍은 공개 코드로 판정할 수 없다 (도착 신호가 매번 +1 mV를 넘어 창이 전부 빠짐) | 확인 | M3 |
 | 7 | Fig4d의 AP+EPSP 예시 쌍은 출발 스파이크가 기울기 규칙에 걸려 0개가 된다 | 확인 | M3 |
-| 9 | 논문의 "FP rate"는 FPR이 아니라 FDR 추정치다 (그래서 100%를 넘을 수 있음) | 확인 | M4 |
+| 9 | 논문의 "FP rate"는 FPR도 FDR도 아닌 별도 지표다 (대조 접시 판정 수 ÷ 실제 접시 판정 수, 그래서 100%를 넘을 수 있음) | 확인 | M4 |
 | 10 | 평균 FP rate는 대조 접시 선택에 민감하다 (IPSP에 필요한 θ 0.80~0.94) | 불확실 | M4 |
 | 2 | 창 끝(469)에 몰린 EPSP 중 일부는 창 제외 규칙이 만든 오르막일 수 있다 | 근거 있음 | 틈 2 측정 |
 | 8 | [내 아이디어] IPSP 정렬 범위(12~25ms)가 늦은 억제 반응을 놓칠 수 있다 | 가설 (쌍 하나) | M3 |
