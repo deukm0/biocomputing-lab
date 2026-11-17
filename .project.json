@@ -1,7 +1,7 @@
 {
   "$schema": "https://deukm0.dev/schema/project.v1.json",
   "slug": "synapse-sta",
-  "name": "바이오컴퓨팅 — 공개 데이터로 논문 재현",
+  "name": "Synapse-STA — 논문 재현",
   "tagline": "Nature Biomedical Engineering(2025) 논문의 신경세포 시냅스 연결 판정 과정을 공개 데이터로 재현하고, 분석 과정의 한계를 검토한 개인 연구",
   "summary": "Nature Biomedical Engineering(2025) 논문이 신경세포 4,096개 전극 기록에서 시냅스 연결을 판정한 과정을, 실험실 없이 공개 데이터로 재현하고 분석 과정의 한계를 검토한 개인 연구",
   "status": "archived",
