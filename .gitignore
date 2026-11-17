@@ -8,6 +8,11 @@
 !/requirements.txt
 !/common/
 !/01_Synapse-STA/
+# 프로젝트 허브(deukm0/project-hub)가 읽는 자매 파일 — 본문·구조도·대표 카드 데모
+!/.project.json
+!/.project.svg
+!/.project.wide.svg
+!/.project.demo.html
 
 # 허용한 폴더 안에서도 제외
 /01_Synapse-STA/실험1_전달노트_ClaudeCode.md

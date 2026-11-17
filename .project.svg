@@ -1,0 +1,34 @@
+<svg viewBox="0 0 350 368" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="시냅스 연결 판정 재현 흐름 — 출발 뉴런의 스파이크와 도착 뉴런의 전압을 평균해 템플릿과 비교하고, 판정을 논문과 대조한다">
+  <title>스파이크에서 연결 판정까지</title>
+  <defs>
+    <marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8e75" />
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="350" height="100" rx="14" fill="#ffffff" stroke="#e2dac8" stroke-width="1" />
+  <text x="14" y="22" font-size="10" fill="#6e6960" font-weight="700" letter-spacing="1.5">입력</text>
+  <text x="14" y="50" font-size="15" fill="#24231f" font-weight="600">출발 뉴런</text>
+  <text x="14" y="69" font-size="12" fill="#5f5d55">스파이크가 난 시점</text>
+  <text x="186" y="50" font-size="15" fill="#24231f" font-weight="600">도착 뉴런</text>
+  <text x="186" y="69" font-size="12" fill="#5f5d55">세포 안에서 잰 전압</text>
+  <line x1="172" y1="38" x2="172" y2="86" stroke="#e2dac8" stroke-width="1" />
+  <rect x="0" y="126" width="350" height="86" rx="14" fill="#68604d" />
+  <text x="14" y="148" font-size="10" fill="#c9cfb3" font-weight="700" letter-spacing="1.5">판정</text>
+  <text x="14" y="176" font-size="17" fill="#ffffff" font-weight="600">평균 + 템플릿</text>
+  <text x="14" y="195" font-size="12" fill="#efe8d6">스파이크마다 전압을 평균해 템플릿 4개와 비교</text>
+  <rect x="0" y="238" width="160" height="100" rx="14" fill="#f1ead8" />
+  <text x="14" y="260" font-size="10" fill="#6e6960" font-weight="700" letter-spacing="1.5">결과</text>
+  <text x="14" y="288" font-size="15" fill="#24231f" font-weight="600">연결 판정</text>
+  <text x="14" y="307" font-size="12" fill="#5f5d55">흥분 · 억제 연결</text>
+  <text x="14" y="323" font-size="12" fill="#5f5d55">또는 연결 없음</text>
+  <rect x="190" y="238" width="160" height="100" rx="14" fill="#f1ead8" />
+  <text x="204" y="260" font-size="10" fill="#6e6960" font-weight="700" letter-spacing="1.5">검증</text>
+  <text x="204" y="288" font-size="15" fill="#24231f" font-weight="600">논문과 대조</text>
+  <text x="204" y="307" font-size="12" fill="#5f5d55">23개 중 23개</text>
+  <text x="204" y="323" font-size="12" fill="#5f5d55">종류까지 일치</text>
+  <line x1="175" y1="104" x2="175" y2="121" stroke="#8a8e75" stroke-width="1.5" marker-end="url(#flow-arrow)" />
+  <line x1="175" y1="216" x2="175" y2="233" stroke="#8a8e75" stroke-width="1.5" marker-end="url(#flow-arrow)" />
+  <line x1="164" y1="288.0" x2="185" y2="288.0" stroke="#8a8e75" stroke-width="1.5" marker-end="url(#flow-arrow)" />
+  <text x="175" y="364" font-size="12" fill="#6e6960" text-anchor="middle">스파이크 검출·평균 단계는 논문의 시점이 공개되지 않아 검증하지 못했다</text>
+</svg>

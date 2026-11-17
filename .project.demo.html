@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>시냅스 연결 판정 미니 데모</title>
+<!-- 프로젝트 허브 대표 카드의 미니 데모. 허브가 sandbox iframe으로 띄운다(외부 리소스 없음).
+     STA의 핵심 한 가지만 흉내 낸다: 출발 뉴런이 스파이크를 칠 때마다 도착 뉴런 전압을 잘라
+     평균하면, 연결이 있으면 굴곡(EPSP)이 남고 없으면 잡음이 1/√N로 줄어 평평해진다.
+     그 평균을 템플릿과 상관계수(PCC)로 비교해 판정한다. 신호·임계값은 예시 값이다. -->
+<style>
+  :root { --bg:#e9dfc6; --ink:#24231f; --muted:#5f5d55; --faint:#6e6960; --olive:#68604d; --paper:#fbfaf6; --sage:#8a8e75; --yes:#4f8a5b; --no:#b04a43; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; }
+  body { background:var(--bg); color:var(--ink); font:14px/1.5 "Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+    display:flex; align-items:center; justify-content:center; padding:16px; overflow:hidden; }
+  .stage { width:100%; max-width:520px; display:flex; flex-direction:column; gap:10px; }
+  .top { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
+  .seg { display:inline-flex; background:rgba(251,250,246,.6); border-radius:999px; padding:3px; gap:2px; }
+  button { font:inherit; font-size:13px; font-weight:600; border:0; border-radius:999px; padding:6px 12px; cursor:pointer; background:transparent; color:var(--muted); }
+  button[aria-pressed="true"] { background:var(--olive); color:#fff; }
+  button:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+  .card { background:var(--paper); border-radius:16px; padding:10px 12px; box-shadow:0 2px 0 rgba(68,63,49,.12); }
+  canvas { width:100%; height:150px; display:block; }
+  .legend { display:flex; gap:14px; font-size:12px; color:var(--faint); }
+  .legend i { display:inline-block; width:14px; height:0; border-top:2px solid var(--ink); vertical-align:middle; margin-right:4px; }
+  .legend i.t { border-top:2px dashed var(--sage); }
+  .n { display:flex; align-items:center; gap:10px; font-size:13px; color:var(--muted); }
+  .n input { flex:1; accent-color:var(--olive); }
+  .n b { color:var(--ink); min-width:76px; text-align:right; font-variant-numeric:tabular-nums; }
+  .verdict { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted); }
+  .verdict strong { font-size:15px; }
+  .verdict .yes { color:var(--yes); } .verdict .no { color:var(--no); }
+  .note { font-size:12px; color:var(--faint); text-align:center; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="top">
+    <div class="seg" role="group" aria-label="두 뉴런 사이">
+      <button type="button" data-c="1" aria-pressed="true">연결 있음</button>
+      <button type="button" data-c="0" aria-pressed="false">연결 없음</button>
+    </div>
+    <span style="font-size:12px;color:var(--faint)">스파이크마다 전압을 잘라 평균</span>
+  </div>
+  <div class="card">
+    <canvas id="cv" aria-label="평균 전압 그래프"></canvas>
+    <div class="legend"><span><i></i>평균한 전압</span><span><i class="t"></i>EPSP 템플릿</span></div>
+  </div>
+  <label class="n">평균 낸 횟수 <input id="n" type="range" min="0" max="3" step="0.01" value="0.3" aria-label="평균 낸 스파이크 수"><b id="nv"></b></label>
+  <div class="verdict" aria-live="polite"><span>템플릿과 닮은 정도 <b id="pcc"></b> · 기준 0.80</span><strong id="v"></strong></div>
+  <div class="note">예시 신호 · 실제 판정은 템플릿 4개(EPSP·IPSP·AP·AP+EPSP)와 비교한다</div>
+</div>
+<script>
+  const L = 120;                               // 창 길이(점)
+  const tpl = Array.from({ length: L }, (_, i) => { const x = (i - 30) / 6; return x < 0 ? 0 : x * Math.exp(1 - x); });
+  // 고정 씨앗 난수 — 같은 N이면 같은 그림이 나온다(슬라이더를 되돌려도 흔들리지 않게)
+  function rng(seed) { return () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }; }
+  function gauss(r) { return Math.sqrt(-2 * Math.log(r() + 1e-12)) * Math.cos(2 * Math.PI * r()); }
+  let connected = 1;
+  function average(N) {
+    const r = rng(7 + connected * 101);
+    const sd = 3 / Math.sqrt(N);                // 잡음은 평균할수록 1/√N로 준다
+    return tpl.map((v) => connected * v + sd * gauss(r));
+  }
+  function pcc(a, b) {
+    const m = (x) => x.reduce((s, v) => s + v, 0) / x.length;
+    const ma = m(a), mb = m(b); let n = 0, da = 0, db = 0;
+    for (let i = 0; i < a.length; i++) { n += (a[i] - ma) * (b[i] - mb); da += (a[i] - ma) ** 2; db += (b[i] - mb) ** 2; }
+    return n / Math.sqrt(da * db || 1);
+  }
+  const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+  function draw() {
+    const N = Math.round(10 ** Number(document.getElementById("n").value));
+    document.getElementById("nv").textContent = N.toLocaleString("ko-KR") + "번";
+    const avg = average(N);
+    const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+    cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+    const y = (v) => h * 0.72 - v * h * 0.42, x = (i) => (i / (L - 1)) * w;
+    ctx.strokeStyle = "rgba(104,96,77,.25)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, y(0)); ctx.lineTo(w, y(0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x(30), 6); ctx.lineTo(x(30), h - 6); ctx.setLineDash([2, 3]); ctx.stroke();
+    ctx.fillStyle = "#6e6960"; ctx.font = "11px system-ui"; ctx.fillText("스파이크", x(30) + 4, 14);
+    ctx.strokeStyle = "#8a8e75"; ctx.lineWidth = 2; ctx.setLineDash([5, 4]); ctx.beginPath();
+    tpl.forEach((v, i) => (i ? ctx.lineTo(x(i), y(v)) : ctx.moveTo(x(i), y(v)))); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = "#24231f"; ctx.lineWidth = 1.6; ctx.beginPath();
+    avg.forEach((v, i) => { const yy = Math.max(2, Math.min(h - 2, y(v))); i ? ctx.lineTo(x(i), yy) : ctx.moveTo(x(i), yy); }); ctx.stroke();
+    const p = pcc(avg, tpl);
+    document.getElementById("pcc").textContent = p.toFixed(2);
+    const v = document.getElementById("v");
+    if (p >= 0.8) { v.textContent = "연결로 판정"; v.className = "yes"; }
+    else { v.textContent = N < 30 ? "아직 잡음뿐" : "연결 없음"; v.className = N < 30 ? "" : "no"; }
+  }
+  document.getElementById("n").oninput = draw;
+  document.querySelectorAll(".seg button").forEach((b) => b.onclick = () => {
+    document.querySelectorAll(".seg button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    connected = Number(b.dataset.c); draw();
+  });
+  window.addEventListener("resize", draw);
+  draw();
+</script>
+</body>
+</html>
