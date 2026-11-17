@@ -26,8 +26,8 @@
   <text x="602" y="131" font-size="15" fill="#5f5d55">흥분 · 억제 연결</text>
   <text x="602" y="152" font-size="15" fill="#5f5d55">또는 연결 없음</text>
   <text x="827" y="105" font-size="20" fill="#24231f" font-weight="600">논문과 대조</text>
-  <text x="827" y="131" font-size="15" fill="#5f5d55">23개 중 23개</text>
-  <text x="827" y="152" font-size="15" fill="#5f5d55">종류까지 일치</text>
+  <text x="827" y="131" font-size="15" fill="#5f5d55">출발 전극 하나의</text>
+  <text x="827" y="152" font-size="15" fill="#5f5d55">23개, 종류까지 일치</text>
   <line x1="255" y1="102.0" x2="274" y2="102.0" stroke="#8a8e75" stroke-width="1.5" marker-end="url(#flow-arrow-w)" />
   <line x1="555" y1="102.0" x2="574" y2="102.0" stroke="#8a8e75" stroke-width="1.5" marker-end="url(#flow-arrow-w)" />
   <line x1="780" y1="102.0" x2="799" y2="102.0" stroke="#8a8e75" stroke-width="1.5" marker-end="url(#flow-arrow-w)" />
